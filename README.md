@@ -17,21 +17,18 @@ This is a web-based Stock Tracker application built using Flask, Alpha Vantage A
 ### Installation
 1. Clone the Repository:
 ```bash
-Copy code
 git clone https://github.com/yourusername/stock-tracker-app.git
 cd stock-tracker-app
 ```
 
 2. Set Up a Virtual Environment:
 ```bash
-Copy code
 python3 -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 ```
 
 3. Install the Dependencies:
 ```bash
-Copy code
 pip install -r requirements.txt
 ```
 
@@ -40,14 +37,12 @@ pip install -r requirements.txt
 - Create a .env file in the root directory of your project.
 - Add your API keys to the .env file:
 ```bash
-Copy code
 ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key
 NEWS_API_KEY=your_news_api_key
 ```
 
 5. Run the Application:
 ```bash
-Copy code
 python app.py
 ```
 
