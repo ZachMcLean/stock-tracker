@@ -1,14 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Final Python Project</title>
-  </head>
-  <body>
-    <div>
-      <h1>Home Page</h1>
-      <p>My name is {{name}}</p>
-    </div> 
-  </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Tracker</h1>
+        <form method="post">
+            <label for="symbol">Stock Symbol:</label>
+            <input type="text" id="symbol" name="symbol" required>
+            <button type="submit">Track</button>
+        </form>
+
+        {% if stock_data %}
+        <h2>Stock Prices for {{ symbol }}</h2>
+        <canvas id="stockChart"></canvas>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+        <h3>Daily Prices</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>Volume</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date, data in stock_data.items() %}
+                <tr>
+                    <td>{{ date }}</td>
+                    <td>{{ data['1. open'] }}</td>
+                    <td>{{ data['2. high'] }}</td>
+                    <td>{{ data['3. low'] }}</td>
+                    <td>{{ data['4. close'] }}</td>
+                    <td>{{ data['5. volume'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% if news_data %}
+        <h2>Trending News</h2>
+        <ul>
+            {% for article in news_data %}
+            <li>
+                <a href="{{ article.url }}" target="_blank">{{ article.title }}</a> - {{ article.publishedAt }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
 </html>
+
