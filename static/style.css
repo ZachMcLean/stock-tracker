@@ -109,3 +109,41 @@ a:hover {
     text-decoration: underline;
 }
 
+
+#current-price {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#current-price h3 {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+#price {
+    font-weight: 700;
+    color: #28a745; /* Green color for a positive impression */
+}
+
+/* Collapsible Section */
+#toggle-daily-prices {
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+#toggle-icon {
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #007bff;
+}
+
+.collapsible-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+

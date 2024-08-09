@@ -18,34 +18,41 @@
 
         {% if stock_data %}
         <h2>Stock Prices for {{ symbol }}</h2>
+        
+        <div id="current-price">
+            <h3>Current Price: <span id="price">$--</span></h3>
+        </div>
+
         <canvas id="stockChart"></canvas>
         <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-        <h3>Daily Prices</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Open</th>
-                    <th>High</th>
-                    <th>Low</th>
-                    <th>Close</th>
-                    <th>Volume</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for date, data in stock_data.items() %}
-                <tr>
-                    <td>{{ date }}</td>
-                    <td>{{ data['1. open'] }}</td>
-                    <td>{{ data['2. high'] }}</td>
-                    <td>{{ data['3. low'] }}</td>
-                    <td>{{ data['4. close'] }}</td>
-                    <td>{{ data['5. volume'] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h3 id="toggle-daily-prices">Daily Prices <span id="toggle-icon">▼</span></h3>
+        <div id="daily-prices" class="collapsible-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Open</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Close</th>
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for date, data in stock_data.items() %}
+                    <tr>
+                        <td>{{ date }}</td>
+                        <td>{{ data['1. open'] }}</td>
+                        <td>{{ data['2. high'] }}</td>
+                        <td>{{ data['3. low'] }}</td>
+                        <td>{{ data['4. close'] }}</td>
+                        <td>{{ data['5. volume'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% endif %}
 
         {% if news_data %}
@@ -59,6 +66,42 @@
         </ul>
         {% endif %}
     </div>
+
+    <script>
+        // Function to fetch and update the current stock price
+        function updatePrice(symbol) {
+            fetch(`/current_price/${symbol}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('price').textContent = `$${data.price}`;
+                })
+                .catch(error => console.error('Error fetching current price:', error));
+        }
+
+        // Automatically update the price every 10 minutes (600000 ms)
+        {% if symbol %}
+        updatePrice('{{ symbol }}');
+        setInterval(() => {
+            updatePrice('{{ symbol }}');
+        }, 600000);
+        {% endif %}
+
+        // Collapsible table section
+        document.getElementById('toggle-daily-prices').addEventListener('click', function() {
+            var content = document.getElementById('daily-prices');
+            var icon = document.getElementById('toggle-icon');
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                icon.textContent = "▼";
+            } else {
+                content.style.display = "none";
+                icon.textContent = "▲";
+            }
+        });
+
+        // Initially collapse the daily prices table
+        document.getElementById('daily-prices').style.display = "none";
+    </script>
 </body>
 </html>
 

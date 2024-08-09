@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import requests
 
 app = Flask(__name__)
@@ -55,6 +55,22 @@ def stock_detail(symbol):
     stock_data = stock_response.json()
 
     return render_template('stock_detail.html', stock_data=stock_data, symbol=symbol)
+
+@app.route('/current_price/<symbol>')
+def current_price(symbol):
+    # Fetch the latest stock price (in this example, we'll use TIME_SERIES_INTRADAY)
+    stock_params = {
+        'function': 'TIME_SERIES_INTRADAY',
+        'symbol': symbol,
+        'interval': '5min',  # Fetch data at 5-minute intervals
+        'apikey': ALPHA_VANTAGE_API_KEY
+    }
+    stock_response = requests.get(ALPHA_VANTAGE_URL, params=stock_params)
+    stock_data = stock_response.json()
+    latest_time = list(stock_data['Time Series (5min)'].keys())[0]
+    latest_price = stock_data['Time Series (5min)'][latest_time]['4. close']
+    
+    return jsonify({'symbol': symbol, 'price': latest_price})
 
 if __name__ == '__main__':
     app.run(debug=True)
